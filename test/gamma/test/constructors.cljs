@@ -54,7 +54,30 @@
     (is (= (->glsl (g/xor b b)) "(b^^b);"))
     (is (= (->glsl (g/not b)) "(!b);"))))
 
-;; FIXME need swizzle tests
+(deftest
+  swizzle
+  (let [v2 {:tag :variable :name "v2" :type :vec2}
+        v3 {:tag :variable :name "v3" :type :vec3}
+        v4 {:tag :variable :name "v4" :type :vec4}]
+    (is (= (->glsl (g/swizzle v2 :xy)) "v2.xy;"))
+    (is (= (->glsl (g/swizzle v2 :yx)) "v2.yx;"))
+    (is (= (->glsl (g/swizzle v2 :y)) "v2.y;"))
+    (is (= (->glsl (g/swizzle v2 :yxx)) "v2.yxx;"))
+    (is (= (->glsl (g/swizzle v2 :xyzw)) "v2.xyzw;")) ;; FIXME?
+
+    (is (= (->glsl (g/swizzle v3 :xyz)) "v3.xyz;"))
+    (is (= (->glsl (g/swizzle v3 :yzx)) "v3.yzx;"))
+    (is (= (->glsl (g/swizzle v3 :zzx)) "v3.zzx;"))
+    (is (= (->glsl (g/swizzle v3 :z)) "v3.z;"))
+    (is (= (->glsl (g/swizzle v3 :yz)) "v3.yz;"))
+    (is (= (->glsl (g/swizzle v3 :xyzw)) "v3.xyzw;")) ;; FIXME?
+
+    (is (= (->glsl (g/swizzle v4 :x)) "v4.x;"))
+    (is (= (->glsl (g/swizzle v4 :zw)) "v4.zw;"))
+    (is (= (->glsl (g/swizzle v4 :yww)) "v4.yww;"))
+    (is (= (->glsl (g/swizzle v4 :yzwx)) "v4.yzwx;"))
+    (is (= (->glsl (g/swizzle v4 :yyzz)) "v4.yyzz;"))
+  ))
 
 (deftest
   variables
